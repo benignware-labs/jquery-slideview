@@ -23,8 +23,8 @@ $(".slideview").slideview({
     <div class="slide">
       Slide 3
   </div>
-  <a class="slideview-button slideview-prev" aria-label="Previous"></a>
-  <a class="slideview-button slideview-next" aria-label="Next"></a>
+  <a class="slideview-button slideview-prev"></a>
+  <a class="slideview-button slideview-next"></a>
   <div class="slideview-pagination"></div>
 </div>
 ```
