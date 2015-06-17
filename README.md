@@ -52,8 +52,7 @@ $(".slideview").slideview({
     </tr>
     <tr>
       <td>scrollStyle</td>
-      <td>Specify which style to use for scroll motion. Can be one of `position` or `transform`. 
-      In order to get support for css-transitions and -transforms, you need to include [jquery.fx-transition](https://github.com/benignware/jquery.fx-transition.git) and [jquery.fx-transform](https://github.com/benignware/jquery.fx-transform.git)
+      <td>Specify which style to use for scroll motion. Can be one of `position` or `transform`.* 
       </td>
     </tr>
     <tr>
@@ -79,7 +78,7 @@ $(".slideview").slideview({
       <td>prevButton</td>
       <td>Previous Button selector or markup</td>
     </tr>
-    
-    
   </tbody>
 </table>
+
+> In order to get support for css-transitions and -transforms, you need to include [jquery.fx-transition](https://github.com/benignware/jquery.fx-transition.git) and [jquery.fx-transform](https://github.com/benignware/jquery.fx-transform.git)
