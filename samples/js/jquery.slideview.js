@@ -117,7 +117,6 @@
   
   
   // detects if element is in browser viewport
-  /*
   function inViewport (element) {
 
     var $element = $(element);
@@ -136,26 +135,6 @@
     
     return bounds.left >= viewport.left && bounds.right <= viewport.right;
     
-  }*/
- 
-  function inViewport(el) {
-    var top = el.offsetTop;
-    var left = el.offsetLeft;
-    var width = el.offsetWidth;
-    var height = el.offsetHeight;
-  
-    while(el.offsetParent) {
-      el = el.offsetParent;
-      top += el.offsetTop;
-      left += el.offsetLeft;
-    }
-  
-    return (
-      top < (window.pageYOffset + window.innerHeight) &&
-      left < (window.pageXOffset + window.innerWidth) &&
-      (top + height) > window.pageYOffset &&
-      (left + width) > window.pageXOffset
-    );
   }
  
   var getVendorStyle = (function() {
@@ -366,8 +345,8 @@
     }
     
     function getOptionElement(name) {
-      var value = options[name];
-      var control = value ? $(value, element)[0] : null;
+      var value = options[name]; 
+      var control = value ? $(value)[0] : null;
       var cached = optionsCache[name];
       if (cached && (cached.value !== control || cached.option !== value)) {
         if (cached.parentNode) {
@@ -670,7 +649,7 @@
         layoutItems();
         vItems = getVisibleItems(s);
         if (vItems.length == 0) {
-          // Error: At this point the view must have visible items
+          // error: at this point the view must have visible items
           return;
         }
       }
@@ -678,12 +657,12 @@
       var vMinScrollIndex = vItems[0].scrollIndex;
       var vMaxScrollIndex = vItems[vItems.length - 1].scrollIndex;
       
-      // Invisible views should scroll instantly
-      // TODO: Check it earlier
+      // invisible views should scroll instantly
       duration = !inViewport(element) ? 0 : duration;
       direction = typeof direction == "number" ? direction : itemIndex < currentIndex ? -1 : itemIndex > currentIndex ? 1 : 0;
       
-      // Check for direct neighbors
+      // check for direct neighbors
+      
       var currentNextIndex = (currentIndex + 1) % items.length;
       currentNextIndex = currentNextIndex < 0 ? currentNextIndex + items.length : currentNextIndex;
       var currentNextItem = items[currentNextIndex];
@@ -1280,7 +1259,7 @@
             
           if (event.preventDefault) {
               event.preventDefault();
-              //event.stopPropagation();
+              event.stopPropagation();
           }
           
           event.returnValue = false;
@@ -1329,7 +1308,7 @@
             $(event.target).focus();
           }, 100);
           
-          //event.stopPropagation();
+          event.stopPropagation();
           
         }
         
@@ -1456,7 +1435,7 @@
         if (touchMoved) {
           touchMoved = false;
           event.preventDefault();
-          //event.stopPropagation();
+          event.stopPropagation();
         }
       });
   
@@ -1634,7 +1613,7 @@
           }
   
         } else {
-          //console.warn('content element not found - selector: ' + options.slideSelector);
+          console.warn('content element not found - selector: ' + options.slideSelector);
         }
   
       });
@@ -1648,16 +1627,18 @@
         var pagination = getOptionElement('pagination');
         if ($(nextButton).is(event.target) || $(nextButton).has(event.target).length) {
           slideView.next();
-        } else if ($(prevButton).is(event.target) || $(prevButton).has(event.target).length) {
+        }
+        if ($(prevButton).is(event.target) || $(prevButton).has(event.target).length) {
           slideView.previous();
-        } else if (pagination) {
-          var newIndex = $(paginationItems).index($(paginationItems).filter(function(index) {
+        }
+        if (pagination) {
+          var slideIndex = $(paginationItems).index($(paginationItems).filter(function(index) {
             if ($(this).is(event.target) || $(this).has(event.target).length) {
               return true;
             };
           }));
-          if (newIndex >= 0) {
-            slideView.slideTo(newIndex);
+          if (slideIndex !== -1) {
+            slideView.slideTo(slideIndex);
           }
         }
       });
