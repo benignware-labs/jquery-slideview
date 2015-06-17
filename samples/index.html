@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+	    <meta charset="utf-8"/>
+	    
+	    <!-- example of jquery checkview component -->
+	    
+	    <title>SlideView</title>
+	    
+	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	    
+	    <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+      
+    
+      <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!--
+      <script src="http://rawgit.com/benignware/jquery.fx-transition/master/dist/jquery.fx-transition.min.js"></script>
+      
+      <script src="http://rawgit.com/benignware/jquery.fx-transform/master/dist/jquery.fx-transform.min.js"></script>-->
+    
+      <script src="jquery.fx-transition.js"></script>
+	    <script src="js/jquery.slideview.js"></script>
+	    <link rel="stylesheet" type="text/css" href="css/jquery.slideview.css">
+
+		<script>
+			$(function() {
+				
+				$(".slideview").slideview({
+				  nextButton: '.slideview-next',
+				  prevButton: '.slideview-prev',
+				  scrollStyle: 'position'
+				});
+				
+			});
+		</script>
+		
+		<style>
+		  
+		  html, body {
+		    height: 100%;
+		    width: 100%;
+		    margin: 0;
+		    padding: 0;
+		  }
+		  
+		  .slideview {
+		    width: 100%;
+		    height: 100%;
+		    background: #eaeaea;
+		  }
+		
+		  .slide {
+		    width: 100%;
+		    height: 100%;
+		  }
+		  
+		  article {
+		    background: #fff;
+		    height: 100%;
+		    overflow: auto;
+		    max-width: 768px;
+		  }
+
+      
+		</style>
+		
+	</head>
+	
+	<body>
+		
+		<div class="slideview">
+		  <div class="slideview-content">
+  			<div class="slide slide-1">
+  			  <article class="container">
+  			    <header class="page-header">
+              <h1 class="page-title">Lorem ipsum dolor sit amet 1</h1>
+              <p class="lead">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+              </p>
+            </header>
+            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  			  </article>
+    	  </div>
+  			
+  			<div class="slide slide-2">
+          <article class="container">
+            <header class="page-header">
+              <h1 class="page-title">Lorem ipsum dolor sit amet 2</h1>
+              <p class="lead">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+              </p>
+            </header>
+            <h2>Lorem ipsum dolor sit amet</h2>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+          </article>
+        </div>
+        
+        <div class="slide slide-3">
+          <article class="container">
+            <header class="page-header">
+              <h1 class="page-title">Lorem ipsum dolor sit amet 3</h1>
+              <p class="lead">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+              </p>
+            </header>
+            <h2>Lorem ipsum dolor sit amet</h2>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+          </article>
+        </div>
+        
+        <div class="slide slide-4">
+          <article class="container">
+            <header class="page-header">
+              <h1 class="page-title">Lorem ipsum dolor sit amet 4</h1>
+              <p class="lead">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+              </p>
+            </header>
+            <h2>Lorem ipsum dolor sit amet</h2>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+          </article>
+        </div>
+        
+        <div class="slide slide-5">
+          <article class="container">
+            <header class="page-header">
+              <h1 class="page-title">Lorem ipsum dolor sit amet 5</h1>
+              <p class="lead">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+              </p>
+            </header>
+            <h2>Lorem ipsum dolor sit amet</h2>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+            <p>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+          </article>
+        </div>
+      </div>
+      
+      <a class="slideview-button slideview-prev" aria-label="Previous"></a>
+      <a class="slideview-button slideview-next" aria-label="Next"></a>
+      <div class="slideview-pagination"></div>
+		
+		</div>
+		
+		
+		
+		
+		
+	</body>
+</html>
