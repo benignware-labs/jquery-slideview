@@ -23,11 +23,18 @@
 
 		<script>
 			$(function() {
+			  
+			  var slides = $('.slideview-content').find('.slide');
+			  
+			  $(slides).each(function() {
+			    $(this).remove();
+			  });
 				
-				$(".slideview").slideview({
+				var slideview = $(".slideview").slideview({
 				  nextButton: '.slideview-next',
 				  prevButton: '.slideview-prev'
-				});
+				}).data('slideview');
+				slideview.replaceAll(slides);
 				
 			});
 		</script>
