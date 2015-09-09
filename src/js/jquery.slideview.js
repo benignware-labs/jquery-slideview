@@ -264,7 +264,7 @@
     getVendorStyle = (function() {
       var
         cache = {},
-        vendorPrefixes = ['Webkit', 'Moz', 'O', 'Ms'], elem = document.createElement('div');
+        vendorPrefixes = ['Webkit', 'Moz', 'O', 'ms'], elem = document.createElement('div');
       return function (styleName, hyphenated) {
         hyphenated = typeof hyphenated === 'boolean' ? hyphenated : false;
         var
