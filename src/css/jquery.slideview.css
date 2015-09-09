@@ -48,11 +48,11 @@
 }
 
 .slideview-prev:before {
-  content: "\276C";
+  content: "\2039";
 }
 
 .slideview-next:before {
-  content: "\276D";
+  content: "\203A";
 }
 
 .slideview-pagination {
