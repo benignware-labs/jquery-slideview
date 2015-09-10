@@ -1364,7 +1364,6 @@
         updateLocation(currentItem);
         
         // Enable dragging
-        console.log("enable dragging");
         isDraggable = true;
         
         // Slide Change
