@@ -739,16 +739,16 @@
       if (!arrayStrictEqual(lItems, items)) {
         // TODO: irregular layout
       } else {
+       invalidateScrollPosition.call(this);
        var s = getScrollPosition();
        var scrollIndex = getScrollPosition().x / element.clientWidth;
        var item = getItemAtScrollPosition(s.x, s.y);
-       
        var itemIndex = this.indexOf(item);
        var itemDiff = itemIndex - scrollIndex;
        if (itemDiff != 0) {
          setScrollPosition((scrollIndex + itemDiff) * element.clientWidth, s.y);
-         layoutItems.call(this);
        }
+       layoutItems.call(this);
       }
       // Update Image Loader
       imageLoader.update();
@@ -1185,7 +1185,7 @@
       
       var scrollIndex = Math.floor(s.x / element.clientWidth);
       var scrollOffset = s.x / element.clientWidth - scrollIndex;
- 
+      
       var lItems = getLayoutItems();
       // maximum number of displayed items is 3
       var minScrollIndex = scrollIndex - 1;
@@ -1260,26 +1260,10 @@
   
     // CSS LAYOUT
     function layout() {
-      
       var elemCSS = {
         overflow: 'hidden'
       };
-      
-      //elemCSS[getVendorStyle('userSelect')] = "none";
-      
       $element.css(elemCSS);
-      /*
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        var itemCSS = {
-          width: '100%',
-          height: '100%', 
-          overflow: 'auto', 
-          WebkitOverflowScrolling: 'touch'
-        };
-        //itemCSS[getVendorStyle('userSelect')] = "none";
-        $(item).css(itemCSS);
-      }*/
     }
     
     // Callbacks
