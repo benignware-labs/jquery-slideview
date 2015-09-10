@@ -42,9 +42,11 @@
 .slideview-button:before {
   display: inline-block;
   font-weight: lighter;
-  font-size: 50px;
-  line-height: 32px;
+  font-size: 120px;
+  line-height: 40px;
   vertical-align: middle;
+  position: relative;
+  top: -10px;
 }
 
 .slideview-prev:before {

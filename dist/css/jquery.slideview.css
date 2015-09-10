@@ -42,17 +42,19 @@
 .slideview-button:before {
   display: inline-block;
   font-weight: lighter;
-  font-size: 50px;
-  line-height: 32px;
+  font-size: 120px;
+  line-height: 40px;
   vertical-align: middle;
+  position: relative;
+  top: -10px;
 }
 
 .slideview-prev:before {
-  content: "\276C";
+  content: "\2039";
 }
 
 .slideview-next:before {
-  content: "\276D";
+  content: "\203A";
 }
 
 .slideview-pagination {
