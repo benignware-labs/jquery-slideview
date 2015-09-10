@@ -1,5 +1,7 @@
 (function() {
   
+   // History Shim
+  var location = window.history.location || window.location;
   
     
   // ImageLoader
