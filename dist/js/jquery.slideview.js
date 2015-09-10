@@ -1932,10 +1932,10 @@
       // add items to container
     
       // init interaction
+      initControls();
       initTouchInteraction();
       initKeyboardInteraction();
       initMouseWheelInteraction();
-      initControls();
       
       // add items
       invalidateFlag = false;
@@ -1945,7 +1945,6 @@
       invalidateFlag = true;
       this.invalidate();
       this.slideTo(options.slideIndex || 0, {duration: 0});
-      
       
     }
     // init plugin
