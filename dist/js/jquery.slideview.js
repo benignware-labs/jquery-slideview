@@ -1372,7 +1372,7 @@
     }
     
     function getSlideState(slide) {
-      return typeof options.pushState === 'function' ? options.pushState.call(this, slide) : (function() {
+      return slide && (typeof options.pushState === 'function' ? options.pushState.call(this, slide) : (function() {
         var titleNode = $(slide).find("[itemprop='title']", "h2");
         var title = titleNode.attr('content') || titleNode.text();
         var urlNode = $(slide).find("[itemprop='url']").addBack('[data-url], [itemid]');
@@ -1381,11 +1381,11 @@
           title: title,
           url: url
         };
-      })();
+      })());
     }
     
     function pushState(url, title) {
-      if (url !== location.href) {
+      if (url && url !== location.href) {
         document.title = title;
         history.pushState({ url: url, title: title}, title, url);
       }
@@ -1445,15 +1445,21 @@
       }
     });
     
+    
+    var updateLocationTimeout = null;
+    
     function updateLocation(slide) {
       options.pushState = true;
       if (options.pushState) {
-        var state = getSlideState(slide);
-        //inViewport(element) && 
-        if (state) {
-          // PUSH STATE
-          pushState(state.url, state.title);
-        }
+        //inViewport(element) &&
+        clearTimeout(updateLocationTimeout); 
+        updateLocationTimeout = window.setTimeout(function() {
+          var state = getSlideState(slide);
+          if ($(element).is(':visible') && inViewport(element) && state) {
+            // PUSH STATE
+            pushState(state.url, state.title);
+          }
+        }, 0);
       }
     }
 
@@ -1930,7 +1936,6 @@
       initKeyboardInteraction();
       initMouseWheelInteraction();
       initControls();
-      
       
       // add items
       invalidateFlag = false;
