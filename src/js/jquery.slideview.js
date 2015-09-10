@@ -1,5 +1,8 @@
 (function() {
   
+  
+    
+  // ImageLoader
   var imageLoader = new ((function() {
     
     var
@@ -516,6 +519,9 @@
     var optionsCache = {};
     var paginationItems = [];
     
+    // Capture current dragging state
+    var isDragging = false;
+    
     function updateControls() {
       var nextButton = getOptionElement('nextButton');
       var prevButton = getOptionElement('prevButton');
@@ -818,7 +824,7 @@
 
       var xp = -x / element.clientWidth * 100;
       var yp = -y / element.clientHeight * 100;
- 
+      
       if ($container.is(":animated")) {
         // TODO: do nothing if a transition to this position is already running
         $container.stop();
@@ -840,12 +846,14 @@
       } else {
         
         // transition
-        
-        
-        var properties = {};
-        switch (options.scrollStyle) {
+        var
+          properties = {},
+          scrollStyle = options.scrollStyle;
+          
+        switch (scrollStyle) {
           
           case 'position': 
+          
             properties = {
               left: xp + "%", 
               top: yp + "%"
@@ -854,7 +862,8 @@
             
           case 'transform':
           case 'transform3d': 
-          
+            
+            
             var transformStyle = getVendorStyle('transform');
             var transformValue = "translate(" + xp + "%" + "," + yp + "%)";
             if (options.scrollStyle == "transform3d") {
@@ -916,6 +925,7 @@
       
       var duration  = transitionOptions.duration;
       var direction = transitionOptions.direction;
+      
       if (duration === 0) {
         setScrollPosition(slideView.indexOf(item) * element.clientWidth, 0, duration);
         return;
@@ -952,7 +962,9 @@
       
       // invisible views should scroll instantly
       duration = !inViewport(element) ? 0 : duration;
+      
       direction = typeof direction == "number" ? direction : itemIndex < currentIndex ? -1 : itemIndex > currentIndex ? 1 : 0;
+      
       
       // check for direct neighbors
       
@@ -977,13 +989,11 @@
 
       var lItems = [];
       var mItems = items.slice();
-      
       if (direction == 0) {
          return;
       }
       
       if (direction > 0) {
-        
         // forward
 
         for (var i = vMinScrollIndex; i <= vMinScrollIndex + items.length; i++) {
@@ -1011,7 +1021,6 @@
       } else if (direction < 0) {
         
         // backward
-        
         for (var i = currentPage; i > currentPage - items.length; i--) {
 
           var m = i % items.length;
@@ -1048,6 +1057,7 @@
       var slideItem = slideView.get(slideIndex);
       
       if (slideItem === item) {
+        
         // Same item, nothing to do
         return;
       }
@@ -1058,6 +1068,7 @@
       // merge options
       var opts = {};
       $.extend(opts, options.transition, transition);
+      
       
       // callback
       slideBefore.call(this, item);
@@ -1076,6 +1087,7 @@
           break;
           
         case 'swipe': 
+          
           swipeTo.call(this, item, opts);
           break;
         
@@ -1162,7 +1174,6 @@
     }
     
     function layoutItems() {
-      
       invalidateScrollPosition();
       
       var s = getScrollPosition();
@@ -1186,7 +1197,7 @@
         minScrollIndex = scrollIndex - 1;
         maxScrollIndex = scrollIndex + 1;
       }
-        
+      
       for (var x = minScrollIndex; x < minScrollIndex + lItems.length; x++) {
 
         var m = x % slideView.size();
@@ -1335,6 +1346,7 @@
         }
         
         if (currentSlide != currentItem) {
+          
           currentSlide = currentItem;
           // Options Slide Complete
           if (slideCallback && typeof options.slideComplete == "function") {
@@ -1356,6 +1368,7 @@
     }
     
     function slideChange(slide) {
+      console.log("slide change: ", slide);
       // Update loader
       imageLoader.update();
       if (slideCallback && typeof options.slideChange == "function") {
@@ -1386,6 +1399,7 @@
     }
     
     function jumpToSlide(url) {
+      console.log("jump to slide url: ", url);
       var slide = $(items).filter(function(index, item) {
         var state = getSlideState(item);
         return state.url === url;
@@ -1398,11 +1412,14 @@
         // slideChange may not be called if no change has occurred, but may be a location switch
         updateLocation(slide);
         // Actually slide
-        slideView.slideTo(slide, transitionOptions);
+        window.setTimeout(function() {
+          slideView.slideTo(slide, transitionOptions);
+        }, 0);
+        
         
         return true;
       }
-      return false
+      return false;
     }
     
     $(window).on('popstate', function(event) {
@@ -1414,16 +1431,18 @@
     });
     
     $(window).on('click', function(e) {
-      var a = $(e.target).is('a[href]') ? e.target : $(e.target).parents('a[href]').get(0);
-      if (a) {
-        var $a = $(a);
-        var href = $(a).attr('href');
-        var handled = jumpToSlide(href);
-        if (handled) {
-          e.preventDefault();
+      if (!isDragging) {
+        var a = $(e.target).is('a[href]') ? e.target : $(e.target).parents('a[href]').get(0);
+        if (a) {
+          var $a = $(a);
+          var href = $(a).attr('href');
+          var handled = jumpToSlide(href);
+          if (handled) {
+            e.preventDefault();
+          }
         }
+        e.preventDefault();
       }
-      e.preventDefault();
     });
     
     $(window).on('click', function(event) {
@@ -1438,6 +1457,7 @@
       options.pushState = true;
       if (options.pushState) {
         var state = getSlideState(slide);
+        //inViewport(element) && 
         if (state) {
           // PUSH STATE
           pushState(state.url, state.title);
@@ -1657,7 +1677,8 @@
       var touchStartEvent = isTouch ? 'touchstart' : mouseDragging ? ' mousedown' : null;
       var touchMoveEvent = isTouch ? 'touchmove' : mouseDragging ? ' mousemove' : null;
       var touchEndEvent = isTouch ? 'touchend' : mouseDragging ? ' mouseup' : null;
-      var touchMoved = false;
+      
+      isDragging = false;
       
       $element.bind(touchStartEvent, function(event) {
         
@@ -1674,7 +1695,7 @@
         touchStartPos = touchCurrentPos = {x: touch.clientX, y: touch.clientY};
         touchStartTime = new Date().getTime();
         initialDirection = null;
-        touchMoved = false;
+        isDragging = false;
       
         if (event.type == 'mousedown') {
           window.setTimeout(function() {
@@ -1701,7 +1722,7 @@
   
         if (touchCurrentPos != null) {
           
-          touchMoved = true;
+          isDragging = true;
           
           var touchEvent = event.originalEvent;
           
@@ -1808,15 +1829,15 @@
         
       });  
   
-  
+      /*
       $element.bind('click', function(event) {
-        if (touchMoved) {
-          touchMoved = false;
+        if (isDragging) {
+          isDragging = false;
           //event.preventDefault();
           //console.log("stop propagation");
           //event.stopPropagation();
         }
-      });
+      });*/
   
     }
     
