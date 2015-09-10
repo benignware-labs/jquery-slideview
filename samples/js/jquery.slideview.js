@@ -1,5 +1,11 @@
 (function() {
   
+  
+  // History Shim
+  var location = window.history.location || window.location;
+    
+    
+  // ImageLoader
   var imageLoader = new ((function() {
     
     var
@@ -264,7 +270,7 @@
     getVendorStyle = (function() {
       var
         cache = {},
-        vendorPrefixes = ['Webkit', 'Moz', 'O', 'Ms'], elem = document.createElement('div');
+        vendorPrefixes = ['Webkit', 'Moz', 'O', 'ms'], elem = document.createElement('div');
       return function (styleName, hyphenated) {
         hyphenated = typeof hyphenated === 'boolean' ? hyphenated : false;
         var
@@ -515,6 +521,9 @@
     
     var optionsCache = {};
     var paginationItems = [];
+    
+    // Capture current dragging state
+    var isDragging = false;
     
     function updateControls() {
       var nextButton = getOptionElement('nextButton');
@@ -818,7 +827,7 @@
 
       var xp = -x / element.clientWidth * 100;
       var yp = -y / element.clientHeight * 100;
- 
+      
       if ($container.is(":animated")) {
         // TODO: do nothing if a transition to this position is already running
         $container.stop();
@@ -840,12 +849,14 @@
       } else {
         
         // transition
-        
-        
-        var properties = {};
-        switch (options.scrollStyle) {
+        var
+          properties = {},
+          scrollStyle = options.scrollStyle;
+          
+        switch (scrollStyle) {
           
           case 'position': 
+          
             properties = {
               left: xp + "%", 
               top: yp + "%"
@@ -854,7 +865,8 @@
             
           case 'transform':
           case 'transform3d': 
-          
+            
+            
             var transformStyle = getVendorStyle('transform');
             var transformValue = "translate(" + xp + "%" + "," + yp + "%)";
             if (options.scrollStyle == "transform3d") {
@@ -916,6 +928,7 @@
       
       var duration  = transitionOptions.duration;
       var direction = transitionOptions.direction;
+      
       if (duration === 0) {
         setScrollPosition(slideView.indexOf(item) * element.clientWidth, 0, duration);
         return;
@@ -952,7 +965,9 @@
       
       // invisible views should scroll instantly
       duration = !inViewport(element) ? 0 : duration;
+      
       direction = typeof direction == "number" ? direction : itemIndex < currentIndex ? -1 : itemIndex > currentIndex ? 1 : 0;
+      
       
       // check for direct neighbors
       
@@ -977,13 +992,11 @@
 
       var lItems = [];
       var mItems = items.slice();
-      
       if (direction == 0) {
          return;
       }
       
       if (direction > 0) {
-        
         // forward
 
         for (var i = vMinScrollIndex; i <= vMinScrollIndex + items.length; i++) {
@@ -1011,7 +1024,6 @@
       } else if (direction < 0) {
         
         // backward
-        
         for (var i = currentPage; i > currentPage - items.length; i--) {
 
           var m = i % items.length;
@@ -1048,6 +1060,7 @@
       var slideItem = slideView.get(slideIndex);
       
       if (slideItem === item) {
+        
         // Same item, nothing to do
         return;
       }
@@ -1059,14 +1072,13 @@
       var opts = {};
       $.extend(opts, options.transition, transition);
       
+      
       // callback
       slideBefore.call(this, item);
       
       // Update slideindex
       
       slideIndex = slideView.indexOf(item);
-      
-      slide.call(this, item);
       
       // perform slide
       switch (opts.type) {
@@ -1076,6 +1088,7 @@
           break;
           
         case 'swipe': 
+          
           swipeTo.call(this, item, opts);
           break;
         
@@ -1088,6 +1101,10 @@
           // TODO: none
           //slideComplete.call(this);
       }
+      
+      isDraggable = false;
+      
+      slide.call(this, item);
       
             
     }
@@ -1162,7 +1179,6 @@
     }
     
     function layoutItems() {
-      
       invalidateScrollPosition();
       
       var s = getScrollPosition();
@@ -1186,7 +1202,7 @@
         minScrollIndex = scrollIndex - 1;
         maxScrollIndex = scrollIndex + 1;
       }
-        
+      
       for (var x = minScrollIndex; x < minScrollIndex + lItems.length; x++) {
 
         var m = x % slideView.size();
@@ -1321,38 +1337,45 @@
     }
    
     function slideComplete() {
-      window.setTimeout(function() {
       
-        var currentItem = getCurrentItem();
-        _currentItem = currentItem;
-         
-        // playback
-        if (slideView.isPlaying()) {
-          window.clearTimeout(playTimeoutID);
-          playTimeoutID = window.setTimeout(function() {
-            slideView.next();
-          }, options.showDuration);
-        }
+      var currentItem = getCurrentItem();
+      _currentItem = currentItem;
+      
+      // playback
+      if (slideView.isPlaying()) {
+        window.clearTimeout(playTimeoutID);
+        playTimeoutID = window.setTimeout(function() {
+          slideView.next();
+        }, options.showDuration);
+      }
+      
+      currentSlide = currentItem;
+      
+      // Queued Slides
+      if (queuedSlide && queuedSlide.item != currentItem) {
+        var item = queuedSlide.item, transition = queuedSlide.transition;
+        queuedSlide = null;
+        slideTo(item, transition);
+      } else {
         
-        if (currentSlide != currentItem) {
-          currentSlide = currentItem;
-          // Options Slide Complete
-          if (slideCallback && typeof options.slideComplete == "function") {
-            options.slideComplete.call(slideView, currentItem);
-          }
-          // Slide Change
-          slideChange.call(this, currentSlide);
-          
-          // Queued Slides
-          if (queuedSlide && queuedSlide.item != currentItem) {
-            var item = queuedSlide.item, transition = queuedSlide.transition;
-            queuedSlide = null;
-            slideTo(item, transition);
-          } else {
-            queuedSlide = null;
-          }
+        // All complete
+        
+        // Update location
+        updateLocation(currentItem);
+        
+        // Enable dragging
+        console.log("enable dragging");
+        isDraggable = true;
+        
+        // Slide Change
+        slideChange.call(this, currentSlide);
+        
+        // Options Slide Complete
+        if (slideCallback && typeof options.slideComplete == "function") {
+          options.slideComplete.call(slideView, currentItem);
         }
-      }, 100);
+      }
+      
     }
     
     function slideChange(slide) {
@@ -1362,7 +1385,7 @@
         options.slideChange.call(slideView, slide);
       }
       // Update location
-      updateLocation(slide);
+      //updateLocation(slide);
     }
     
     function getSlideState(slide) {
@@ -1398,11 +1421,14 @@
         // slideChange may not be called if no change has occurred, but may be a location switch
         updateLocation(slide);
         // Actually slide
-        slideView.slideTo(slide, transitionOptions);
+        window.setTimeout(function() {
+          slideView.slideTo(slide, transitionOptions);
+        }, 0);
+        
         
         return true;
       }
-      return false
+      return false;
     }
     
     $(window).on('popstate', function(event) {
@@ -1414,16 +1440,18 @@
     });
     
     $(window).on('click', function(e) {
-      var a = $(e.target).is('a[href]') ? e.target : $(e.target).parents('a[href]').get(0);
-      if (a) {
-        var $a = $(a);
-        var href = $(a).attr('href');
-        var handled = jumpToSlide(href);
-        if (handled) {
-          e.preventDefault();
+      if (!isDragging) {
+        var a = $(e.target).is('a[href]') ? e.target : $(e.target).parents('a[href]').get(0);
+        if (a) {
+          var $a = $(a);
+          var href = $(a).attr('href');
+          var handled = jumpToSlide(href);
+          if (handled) {
+            e.preventDefault();
+          }
         }
+        e.preventDefault();
       }
-      e.preventDefault();
     });
     
     $(window).on('click', function(event) {
@@ -1438,6 +1466,7 @@
       options.pushState = true;
       if (options.pushState) {
         var state = getSlideState(slide);
+        //inViewport(element) && 
         if (state) {
           // PUSH STATE
           pushState(state.url, state.title);
@@ -1457,6 +1486,8 @@
     this.getSlideIndex = function() {
       return slideIndex;
     };
+    
+    
     
     this.slideTo = function(item, transition) {
       
@@ -1657,15 +1688,20 @@
       var touchStartEvent = isTouch ? 'touchstart' : mouseDragging ? ' mousedown' : null;
       var touchMoveEvent = isTouch ? 'touchmove' : mouseDragging ? ' mousemove' : null;
       var touchEndEvent = isTouch ? 'touchend' : mouseDragging ? ' mouseup' : null;
-      var touchMoved = false;
+      
+      isDragging = false;
       
       $element.bind(touchStartEvent, function(event) {
+        
+        if (!isDraggable) {
+          return;
+        }
         
         if (event.target, $(container).has($(event.target)).length === 0) {
           return;
         }
-        
-        if($container.is(':animated')) {
+
+        if ($container.is(':animated')) {
           $container.stop();
         }
         
@@ -1674,7 +1710,7 @@
         touchStartPos = touchCurrentPos = {x: touch.clientX, y: touch.clientY};
         touchStartTime = new Date().getTime();
         initialDirection = null;
-        touchMoved = false;
+        isDragging = false;
       
         if (event.type == 'mousedown') {
           window.setTimeout(function() {
@@ -1701,7 +1737,7 @@
   
         if (touchCurrentPos != null) {
           
-          touchMoved = true;
+          isDragging = false;
           
           var touchEvent = event.originalEvent;
           
@@ -1808,15 +1844,15 @@
         
       });  
   
-  
+      /*
       $element.bind('click', function(event) {
-        if (touchMoved) {
-          touchMoved = false;
+        if (isDragging) {
+          isDragging = false;
           //event.preventDefault();
           //console.log("stop propagation");
           //event.stopPropagation();
         }
-      });
+      });*/
   
     }
     

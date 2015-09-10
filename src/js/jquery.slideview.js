@@ -1,8 +1,9 @@
 (function() {
   
-   // History Shim
-  var location = window.history.location || window.location;
   
+  // History Shim
+  var location = window.history.location || window.location;
+    
     
   // ImageLoader
   var imageLoader = new ((function() {
@@ -1079,8 +1080,6 @@
       
       slideIndex = slideView.indexOf(item);
       
-      slide.call(this, item);
-      
       // perform slide
       switch (opts.type) {
 
@@ -1102,6 +1101,10 @@
           // TODO: none
           //slideComplete.call(this);
       }
+      
+      isDraggable = false;
+      
+      slide.call(this, item);
       
             
     }
@@ -1334,50 +1337,55 @@
     }
    
     function slideComplete() {
-      window.setTimeout(function() {
       
-        var currentItem = getCurrentItem();
-        _currentItem = currentItem;
-         
-        // playback
-        if (slideView.isPlaying()) {
-          window.clearTimeout(playTimeoutID);
-          playTimeoutID = window.setTimeout(function() {
-            slideView.next();
-          }, options.showDuration);
-        }
+      var currentItem = getCurrentItem();
+      _currentItem = currentItem;
+      
+      // playback
+      if (slideView.isPlaying()) {
+        window.clearTimeout(playTimeoutID);
+        playTimeoutID = window.setTimeout(function() {
+          slideView.next();
+        }, options.showDuration);
+      }
+      
+      currentSlide = currentItem;
+      
+      // Queued Slides
+      if (queuedSlide && queuedSlide.item != currentItem) {
+        var item = queuedSlide.item, transition = queuedSlide.transition;
+        queuedSlide = null;
+        slideTo(item, transition);
+      } else {
         
-        if (currentSlide != currentItem) {
-          
-          currentSlide = currentItem;
-          // Options Slide Complete
-          if (slideCallback && typeof options.slideComplete == "function") {
-            options.slideComplete.call(slideView, currentItem);
-          }
-          // Slide Change
-          slideChange.call(this, currentSlide);
-          
-          // Queued Slides
-          if (queuedSlide && queuedSlide.item != currentItem) {
-            var item = queuedSlide.item, transition = queuedSlide.transition;
-            queuedSlide = null;
-            slideTo(item, transition);
-          } else {
-            queuedSlide = null;
-          }
+        // All complete
+        
+        // Update location
+        updateLocation(currentItem);
+        
+        // Enable dragging
+        console.log("enable dragging");
+        isDraggable = true;
+        
+        // Slide Change
+        slideChange.call(this, currentSlide);
+        
+        // Options Slide Complete
+        if (slideCallback && typeof options.slideComplete == "function") {
+          options.slideComplete.call(slideView, currentItem);
         }
-      }, 100);
+      }
+      
     }
     
     function slideChange(slide) {
-      console.log("slide change: ", slide);
       // Update loader
       imageLoader.update();
       if (slideCallback && typeof options.slideChange == "function") {
         options.slideChange.call(slideView, slide);
       }
       // Update location
-      updateLocation(slide);
+      //updateLocation(slide);
     }
     
     function getSlideState(slide) {
@@ -1401,7 +1409,6 @@
     }
     
     function jumpToSlide(url) {
-      console.log("jump to slide url: ", url);
       var slide = $(items).filter(function(index, item) {
         var state = getSlideState(item);
         return state.url === url;
@@ -1479,6 +1486,8 @@
     this.getSlideIndex = function() {
       return slideIndex;
     };
+    
+    
     
     this.slideTo = function(item, transition) {
       
@@ -1684,11 +1693,15 @@
       
       $element.bind(touchStartEvent, function(event) {
         
-        if (event.target, $(container).has($(event.target)).length === 0) {
+        if (!isDraggable) {
           return;
         }
         
-        if($container.is(':animated')) {
+        if (event.target, $(container).has($(event.target)).length === 0) {
+          return;
+        }
+
+        if ($container.is(':animated')) {
           $container.stop();
         }
         
@@ -1724,7 +1737,7 @@
   
         if (touchCurrentPos != null) {
           
-          isDragging = true;
+          isDragging = false;
           
           var touchEvent = event.originalEvent;
           
