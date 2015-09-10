@@ -1385,8 +1385,10 @@
     }
     
     function pushState(url, title) {
-      if (url && url !== location.href) {
+      if (title && title !== document.title) {
         document.title = title;
+      }
+      if (url && url !== location.href) {
         history.pushState({ url: url, title: title}, title, url);
       }
     }
@@ -1932,10 +1934,10 @@
       // add items to container
     
       // init interaction
-      initControls();
       initTouchInteraction();
       initKeyboardInteraction();
       initMouseWheelInteraction();
+      initControls();
       
       // add items
       invalidateFlag = false;
@@ -1945,6 +1947,7 @@
       invalidateFlag = true;
       this.invalidate();
       this.slideTo(options.slideIndex || 0, {duration: 0});
+      
       
     }
     // init plugin
