@@ -1,3 +1,14 @@
+.slideview {
+  min-height: 250px;
+  position: relative;
+}
+
+.slideview-slide {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+}
+
 .slideview-button {
   position: absolute;
   width: 40px;
