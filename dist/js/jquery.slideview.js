@@ -525,6 +525,9 @@
     // Capture current dragging state
     var isDragging = false;
     
+    // Prevent dragging during slide
+    var isDraggable = true;
+    
     function updateControls() {
       var nextButton = getOptionElement('nextButton');
       var prevButton = getOptionElement('prevButton');
