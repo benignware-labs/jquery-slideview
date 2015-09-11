@@ -24,18 +24,7 @@
 		<script>
 			$(function() {
 			  
-			  var slides = $('.slideview-content').find('.slideview-slide');
-			  
-			  $(slides).each(function() {
-			    $(this).remove();
-			  });
-				
-				var slideview = $(".slideview").slideview({
-				  nextButton: '.slideview-next',
-				  prevButton: '.slideview-prev'
-				}).data('slideview');
-				
-				slideview.replaceAll(slides);
+			  $(".slideview").slideview();
 				
 			});
 		</script>
