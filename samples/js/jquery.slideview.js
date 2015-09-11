@@ -1770,12 +1770,12 @@
                 setScrollPosition(s.x + dx, 0, 0);
                 
                 layoutItems();
+                
+                // Prevent default actions, e.g. history swipe
+                event.preventDefault();
+                touchEvent.preventDefault();
             }
-  
-            event.preventDefault();
     
-          } else  {
-          
           }
         }
   
