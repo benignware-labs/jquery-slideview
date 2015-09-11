@@ -1061,7 +1061,6 @@
     
     function slideTo(item, transition) {
       
-      
       var slideItem = slideView.get(slideIndex);
       
       if (slideItem === item) {
@@ -1083,6 +1082,8 @@
       // Update slideindex
       
       slideIndex = slideView.indexOf(item);
+      
+      isDraggable = false;
       
       // perform slide
       switch (opts.type) {
@@ -1106,7 +1107,6 @@
           //slideComplete.call(this);
       }
       
-      isDraggable = false;
       
       slide.call(this, item);
       
