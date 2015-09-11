@@ -1912,6 +1912,10 @@
         overflow: 'hidden'
       });
       
+      if (isTouch) {
+        $element.addClass('slideview-touch');
+      }
+      
       // init container
       $container = $(options.contentSelector, $element);
       container = $container[0];

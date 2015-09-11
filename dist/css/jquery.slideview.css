@@ -60,6 +60,10 @@
   position: relative;
 }
 
+.slideview-touch .slideview-button {
+  display: none;
+}
+
 .slideview-prev:before {
   content: "\2039";
 }
