@@ -838,7 +838,7 @@
 
       if (duration == 0 || s.x == x && s.y == y) {
         
-        // no transition
+        // No Transition
         if (s.x != x || s.y != y) {
           setElementPosition(container, xp + "%", yp + "%", options.scrollStyle);
           scrollPosition = {x: x, y: y};
@@ -846,8 +846,9 @@
         
         if (s.x != x || s.y == y) {
           // Scroll Position has changed
-          scrollComplete();
         }
+        
+        scrollComplete();
         
       } else {
         
@@ -1060,10 +1061,10 @@
     
     function slideTo(item, transition) {
       
+      
       var slideItem = slideView.get(slideIndex);
       
       if (slideItem === item) {
-        
         // Same item, nothing to do
         return;
       }
@@ -1301,13 +1302,16 @@
     }
     
     function scrollComplete() {
+      // Enable dragging
+      isDraggable = true;
+      
       if (typeof options.scrollComplete == 'function') {
         options.scrollComplete.call(slideView);
       }
       scrollDirection = 0;
       validateLayoutItems();
       var s = getScrollPosition();
-      if (s.x % element.clientWidth == 0) {
+      if (element.clientWidth === 0 || s.x % element.clientWidth === 0) {
         layoutItems.call(this);
         var currentItem = getCurrentItem();
         slideComplete();
@@ -1360,9 +1364,6 @@
         
         // Update location
         updateLocation(currentItem);
-        
-        // Enable dragging
-        isDraggable = true;
         
         // Slide Change
         slideChange.call(this, currentSlide);
@@ -1737,12 +1738,12 @@
       });
       
       $element.bind(touchMoveEvent, function(event) {
-        
         // touch move
   
         if (touchCurrentPos != null) {
           
-          isDragging = false;
+          
+          isDragging = true;
           
           var touchEvent = event.originalEvent;
           
@@ -1835,6 +1836,7 @@
   
             }
             
+            isDraggable = false;
             // TODO: call slideTo
             //var e = getItemAtScrollPosition(ns.x, ns.y);
             //slideView.slideTo(e, {transition: 'swipe', duration: duration});
@@ -1952,10 +1954,10 @@
       for (var i = 0; i < initialItems.length; i++) {
         this.add(initialItems[i]);
       }
+      
       invalidateFlag = true;
       this.invalidate();
-      this.slideTo(options.slideIndex || 0, {duration: 0});
-      
+      this.slideTo(options.slideIndex >= 0 ? options.slideIndex : 0, {duration: 0});
       
     }
     // init plugin
