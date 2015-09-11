@@ -1849,16 +1849,6 @@
         
       });  
   
-      /*
-      $element.bind('click', function(event) {
-        if (isDragging) {
-          isDragging = false;
-          //event.preventDefault();
-          //console.log("stop propagation");
-          //event.stopPropagation();
-        }
-      });*/
-  
     }
     
    
