@@ -41,7 +41,7 @@ module.exports = function(grunt) {
         options: {
           open: true,
           base: 'samples',
-          port: 9000,
+          port: 9090,
           livereload: true,
           keepalive: false,
           index: 'index.html'
