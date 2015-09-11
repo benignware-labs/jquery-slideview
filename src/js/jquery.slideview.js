@@ -1263,9 +1263,20 @@
   
     // CSS LAYOUT
     function layout() {
+      // Setup styles for element
+      
       var elemCSS = {
+        // Element should hide overflow content
         overflow: 'hidden'
       };
+      
+      // Slideview should be in position context
+      $element.css('position', '');
+      if ($element.css('position') === 'static') {
+        $element.css('position', 'relative');
+      }
+      
+      // Apply element styles
       $element.css(elemCSS);
     }
     
@@ -1911,7 +1922,7 @@
       }
       
       $container.css({
-        position: 'relative', 
+        position: 'absolute', 
         left: 0, 
         top: 0, 
         width: '100%', 
