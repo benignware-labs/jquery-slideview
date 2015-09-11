@@ -1440,6 +1440,7 @@
     });
     
     $(window).on('click', function(e) {
+      console.log("click slideview, is dragging???", isDragging);
       if (!isDragging) {
         var a = $(e.target).is('a[href]') ? e.target : $(e.target).parents('a[href]').get(0);
         if (a) {
@@ -1699,6 +1700,8 @@
       
       $element.bind(touchStartEvent, function(event) {
         
+        isDragging = false;
+        
         if (!isDraggable) {
           return;
         }
@@ -1716,7 +1719,7 @@
         touchStartPos = touchCurrentPos = {x: touch.clientX, y: touch.clientY};
         touchStartTime = new Date().getTime();
         initialDirection = null;
-        isDragging = false;
+        
       
         if (event.type == 'mousedown') {
           window.setTimeout(function() {
