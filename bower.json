@@ -1,0 +1,22 @@
+{
+  "name": "jquery-slideview",
+  "version": "0.0.1",
+  "homepage": "https://github.com/benignware-labs/jquery-slideview",
+  "authors": [
+    "Rafael Nowrotek <mail@benignware.com>"
+  ],
+  "description": "JQuery Slider Component",
+  "main": "dist/js/jquery.slideview.min.js",
+  "keywords": [
+    "jquery-plugin",
+    "slider"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
