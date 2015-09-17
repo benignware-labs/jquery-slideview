@@ -1440,7 +1440,6 @@
     });
     
     $(window).on('click', function(e) {
-      console.log("click slideview, is dragging???", isDragging);
       if (!isDragging) {
         var a = $(e.target).is('a[href]') ? e.target : $(e.target).parents('a[href]').get(0);
         if (a) {
@@ -1451,18 +1450,8 @@
             e.preventDefault();
           }
         }
-        e.preventDefault();
       }
     });
-    
-    $(window).on('click', function(event) {
-      var eventState = event.originalEvent.state;
-      if (eventState) {
-        document.title = eventState.title;
-        jumpToSlide(eventState.url);
-      }
-    });
-    
     
     var updateLocationTimeout = null;
     
