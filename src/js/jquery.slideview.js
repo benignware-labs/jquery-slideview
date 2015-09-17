@@ -1453,6 +1453,14 @@
       }
     });
     
+    $(window).on('click', function(event) {
+      var eventState = event.originalEvent.state;
+      if (eventState) {
+        document.title = eventState.title;
+        jumpToSlide(eventState.url);
+      }
+    });
+    
     var updateLocationTimeout = null;
     
     function updateLocation(slide) {
