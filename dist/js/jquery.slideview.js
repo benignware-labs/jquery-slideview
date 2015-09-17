@@ -1408,24 +1408,26 @@
       }
     }
     
-    function jumpToSlide(url) {
+    function jumpToSlide(url, clicked) {
+      clicked = typeof clicked === 'undefined' ? false : clicked;
       var slide = $(items).filter(function(index, item) {
         var state = getSlideState(item);
         return state.url === url;
       }).get(0);
+      
       if (slide) {
-        var transitionOptions = {};
-        if (!$(element).is(':visible') || !inViewport(element)) {
-          transitionOptions.duration = 0;
+        if (!isDragging || !clicked) {
+          var transitionOptions = {};
+          if (!$(element).is(':visible') || !inViewport(element)) {
+            transitionOptions.duration = 0;
+          }
+          // slideChange may not be called if no change has occurred, but may be a location switch
+          updateLocation(slide);
+          // Actually slide
+          window.setTimeout(function() {
+            slideView.slideTo(slide, transitionOptions);
+          }, 0);
         }
-        // slideChange may not be called if no change has occurred, but may be a location switch
-        updateLocation(slide);
-        // Actually slide
-        window.setTimeout(function() {
-          slideView.slideTo(slide, transitionOptions);
-        }, 0);
-        
-        
         return true;
       }
       return false;
@@ -1440,15 +1442,13 @@
     });
     
     $(window).on('click', function(e) {
-      if (!isDragging) {
-        var a = $(e.target).is('a[href]') ? e.target : $(e.target).parents('a[href]').get(0);
-        if (a) {
-          var $a = $(a);
-          var href = $(a).attr('href');
-          var handled = jumpToSlide(href);
-          if (handled) {
-            e.preventDefault();
-          }
+      var a = $(e.target).is('a[href]') ? e.target : $(e.target).parents('a[href]').get(0);
+      if (a) {
+        var $a = $(a);
+        var href = $(a).attr('href');
+        var handled = jumpToSlide(href, true);
+        if (handled) {
+          e.preventDefault();
         }
       }
     });
@@ -1457,7 +1457,7 @@
       var eventState = event.originalEvent.state;
       if (eventState) {
         document.title = eventState.title;
-        jumpToSlide(eventState.url);
+        jumpToSlide(eventState.url, clicked);
       }
     });
     
@@ -1695,9 +1695,12 @@
       
       isDragging = false;
       
-      $element.bind(touchStartEvent, function(event) {
-        
+      $(window).bind(touchStartEvent, function(event) {
+        // Stop Dragging
         isDragging = false;
+      });
+      
+      $element.bind(touchStartEvent, function(event) {
         
         if (!isDraggable) {
           return;
@@ -1741,7 +1744,6 @@
         // touch move
   
         if (touchCurrentPos != null) {
-          
           
           isDragging = true;
           
