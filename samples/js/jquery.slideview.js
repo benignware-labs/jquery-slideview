@@ -534,7 +534,6 @@
       var $pagination = $(getOptionElement('pagination'));
       var slideIndex = this.getSlideIndex();
       var size = this.size();
-      console.log("size: ", size, $nextButton.css('display'));
       if ($nextButton.length) {
         if (slideIndex === size - 1) {
           $nextButton.addClass(options.buttonDisabledClass);
@@ -542,7 +541,6 @@
           $nextButton.removeClass(options.buttonDisabledClass);
         }
         size > 1 ? $nextButton.show() : $nextButton.hide();
-         console.log("next: ", size, $nextButton.css('display'));
       }
       if ($prevButton.length) {
         if (slideIndex === 0 && !options.endless) {
