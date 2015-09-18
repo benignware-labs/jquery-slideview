@@ -63,7 +63,7 @@
 }
 
 .slideview-touch .slideview-button {
-  display: none;
+  display: none !important;
 }
 
 .slideview-prev:before {
