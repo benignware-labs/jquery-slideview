@@ -529,29 +529,30 @@
     var isDraggable = true;
     
     function updateControls() {
-      var nextButton = getOptionElement('nextButton');
-      var prevButton = getOptionElement('prevButton');
-      var pagination = getOptionElement('pagination');
+      var $nextButton = $(getOptionElement('nextButton'));
+      var $prevButton = $(getOptionElement('prevButton'));
+      var $pagination = $(getOptionElement('pagination'));
       var slideIndex = this.getSlideIndex();
       var size = this.size();
-      if (nextButton) {
-        var $nextButton = $(nextButton);
+      console.log("size: ", size, $nextButton.css('display'));
+      if ($nextButton.length) {
         if (slideIndex === size - 1) {
           $nextButton.addClass(options.buttonDisabledClass);
         } else {
           $nextButton.removeClass(options.buttonDisabledClass);
         }
+        size > 1 ? $nextButton.show() : $nextButton.hide();
+         console.log("next: ", size, $nextButton.css('display'));
       }
-      if (prevButton) {
-        var $prevButton = $(prevButton);
+      if ($prevButton.length) {
         if (slideIndex === 0 && !options.endless) {
           $prevButton.addClass(options.buttonDisabledClass);
         } else {
           $prevButton.removeClass(options.buttonDisabledClass);
         }
+        size > 1 ? $prevButton.show() : $prevButton.hide();
       }
-      if (pagination) {
-        var $pagination = $(pagination);
+      if ($pagination.length) {
         if (paginationItems.length !== this.size()) {
           $(paginationItems).each(function() {
             $(this).remove();
@@ -566,6 +567,7 @@
             $(this).removeClass(options.paginationActiveClass);
           }
         });
+        size > 1 ? $pagination.show() : $pagination.hide();
       }
     }
     
