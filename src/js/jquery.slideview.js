@@ -630,7 +630,7 @@
     };
     
     this.add = function(item, index) {
-      item = item instanceof jQuery ? item.get(0) : item;
+      item = item instanceof $ ? item.get(0) : item;
       // Import nodes
       if (item.ownerDocument !== element.ownerDocument) {
         item = element.ownerDocument.importNode(item, true);
@@ -704,7 +704,7 @@
     };
     
     this.addAll = function(collection, index) {
-      collection = collection instanceof jQuery ? collection.toArray() : collection;
+      collection = collection instanceof $ ? collection.toArray() : collection;
       index = typeof index == 'number' ? index : this.size();
       invalidateFlag = false;
       for (var i = 0; i < collection.length; i++) {
@@ -715,7 +715,7 @@
     };
     
     this.replaceAll = function(collection) {
-      collection = collection instanceof jQuery ? collection.toArray() : collection;
+      collection = collection instanceof $ ? collection.toArray() : collection;
       invalidateFlag = false;
       var slideIndex = this.getSlideIndex(), currentSlide = null;
       for (var i = 0; i < this.size(); i++) {
