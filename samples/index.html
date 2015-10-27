@@ -18,13 +18,32 @@
       <script src="http://rawgit.com/benignware/jquery.fx-transition/master/dist/jquery.fx-transition.min.js"></script>
       <script src="http://rawgit.com/benignware/jquery.fx-transform/master/dist/jquery.fx-transform.min.js"></script>
     
-	    <script src="js/jquery.slideview.js"></script>
+	    <script src="../src/js/jquery.slideview.js"></script>
+	    
 	    <link rel="stylesheet" type="text/css" href="css/jquery.slideview.css">
 
 		<script>
 			$(function() {
 			  
-			  $(".slideview").slideview();
+			  function slugify(text) {
+          return text.toString().toLowerCase()
+            .replace(/\s+/g, '-')           // Replace spaces with -
+            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+            .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+            .replace(/^-+/, '')             // Trim - from start of text
+            .replace(/-+$/, '');            // Trim - from end of text
+        }
+
+			  $(".slideview").slideview({
+			    slideState: function(item) {
+			      var
+			       title = $(item).find('.page-title').text();
+			      return {
+			        url: '#' + slugify(title),
+			        title: title
+			      };
+			    }
+			  });
 				
 			});
 		</script>

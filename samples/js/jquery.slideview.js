@@ -487,7 +487,10 @@
     paginationActiveClass: 'slideview-pagination-active',
     paginationItem: function(index) {
       return $('<a class="slideview-pagination-item"></a>');
-    }
+    },
+    
+    // History
+    slideState: null
   };
   
   
@@ -1397,8 +1400,8 @@
     }
     
     function getSlideState(slide) {
-      return slide && (typeof options.pushState === 'function' ? options.pushState.call(this, slide) : (function() {
-        var titleNode = $(slide).find("[itemprop='title']", "h2");
+      return slide && (typeof options.slideState === 'function' ? options.slideState.call(this, slide) : (function() {
+        var titleNode = $(slide).find("[itemprop='title']", "h1", "h2");
         var title = titleNode.attr('content') || titleNode.text();
         var urlNode = $(slide).find("[itemprop='url']").addBack('[data-url], [itemid]');
         var url = urlNode.attr('data-url') || urlNode.attr('itemprop') && urlNode.attr('content') || urlNode.attr('itemid');
@@ -1474,18 +1477,15 @@
     var updateLocationTimeout = null;
     
     function updateLocation(slide) {
-      options.pushState = true;
-      if (options.pushState) {
-        //inViewport(element) &&
-        clearTimeout(updateLocationTimeout); 
-        updateLocationTimeout = window.setTimeout(function() {
-          var state = getSlideState(slide);
-          if ($(element).is(':visible') && inViewport(element) && state) {
-            // PUSH STATE
-            pushState(state.url, state.title);
-          }
-        }, 0);
-      }
+      //inViewport(element) &&
+      clearTimeout(updateLocationTimeout); 
+      updateLocationTimeout = window.setTimeout(function() {
+        var state = getSlideState(slide);
+        if ($(element).is(':visible') && inViewport(element) && state) {
+          // PUSH STATE
+          pushState(state.url, state.title);
+        }
+      }, 0);
     }
 
     // public methods
@@ -1916,11 +1916,18 @@
         overflow: 'hidden'
       });
       
+      // Add touch detection
       if (isTouch) {
         $element.addClass('slideview-touch');
       }
       
-      // init container
+      // Init interaction
+      initTouchInteraction();
+      initKeyboardInteraction();
+      initMouseWheelInteraction();
+      initControls();
+      
+      // Init container
       $container = $(options.contentSelector, $element);
       container = $container[0];
       if (!container) {
@@ -1944,32 +1951,28 @@
           var child = parent.childNodes[i];
           if (isItem(child)) {
             items.push(child);
-          }/* else {
-            parent.removeChild(child);
-            i--;
-          }*/
+          }
         }
         return items;
       })(container || element);
       
       
-      // add items to container
-    
-      // init interaction
-      initTouchInteraction();
-      initKeyboardInteraction();
-      initMouseWheelInteraction();
-      initControls();
+      // Add Initial items
+      this.addAll(initialItems);
       
-      // add items
-      invalidateFlag = false;
-      for (var i = 0; i < initialItems.length; i++) {
-        this.add(initialItems[i]);
+      // Initial Slide Index
+      var slideIndex = options.slideIndex || 0;
+      if (typeof options.slideIndex === 'undefined') {
+        for (var i = 0; i < this.size(); i++) {
+          var slide = this.get(i);
+          var state = getSlideState(slide);
+          if (state && location.href.match(new RegExp(state.url,'g'))) {
+            slideIndex = i;
+            break;
+          } 
+        }
       }
-      
-      invalidateFlag = true;
-      this.invalidate();
-      this.slideTo(options.slideIndex >= 0 ? options.slideIndex : 0, {duration: 0});
+      this.slideTo(slideIndex, {duration: 0});
       
     }
     // init plugin
