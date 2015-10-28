@@ -672,7 +672,7 @@
     // detects if the specified element is a valid item
     function isItem(elem) {
       return elem.nodeType == 1
-        && $.inArray(elem.localName.toLowerCase(), ["br", "script", "link", "map"]) == -1;
+        && $.inArray(elem.localName.toLowerCase(), ["meta", "br", "script", "link", "map"]) == -1;
     }
     
     // returns the item's index
@@ -1456,7 +1456,7 @@
     }
     
     function getSlideState(slide) {
-      return slide && (typeof options.slideState === 'function' ? options.slideState.call(this, slide) : (function() {
+      return slide && (typeof options.slideState === 'function' ? options.slideState.call(element, slide) : (function() {
         var titleNode = $(slide).find("[itemprop='title']", "h1", "h2");
         var title = titleNode.attr('content') || titleNode.text();
         var urlNode = $(slide).find("[itemprop='url']").addBack('[data-url], [itemid]');
@@ -1469,9 +1469,8 @@
     }
     
     function pushState(url, title) {
-      
       if (title && title !== document.title) {
-        document.title = title;
+        document.title = title || $('head title').text();
       }
       if (url !== location.href) {
         history.pushState({ url: url || location.href, title: title || "Untitled Document"}, title, url);
