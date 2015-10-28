@@ -270,7 +270,56 @@
             .replace(/-+$/, '');            // Trim - from end of text
         })();
       };
-    })();
+    })(),
+    
+    
+    /**
+     * Escape regex
+     * @param {String} string
+     */
+    escapeRegExp = (function () {
+      
+      // Referring to the table here:
+      // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/regexp
+      // these characters should be escaped
+      // \ ^ $ * + ? . ( ) | { } [ ]
+      // These characters only have special meaning inside of brackets
+      // they do not need to be escaped, but they MAY be escaped
+      // without any adverse effects (to the best of my knowledge and casual testing)
+      // : ! , = 
+      // my test "~!@#$%^&*(){}[]`/=?+\|-_;:'\",<.>".match(/[\#]/g)
+    
+      var
+        specials = [
+          // order matters for these
+            "-"
+          , "["
+          , "]"
+          // order doesn't matter for any of these
+          , "/"
+          , "{"
+          , "}"
+          , "("
+          , ")"
+          , "*"
+          , "+"
+          , "?"
+          , "."
+          , "\\"
+          , "^"
+          , "$"
+          , "|"
+        ],
+  
+        // I choose to escape every character with '\'
+        // even though only some strictly require it when inside of []
+        regex = RegExp('[' + specials.join('\\') + ']', 'g');
+    
+      return function (string) {
+        return string.replace(regex, "\\$&");
+      };
+    
+    }()),
     
     /**
      * Retrieves a vendor prefixed style name for the given property
@@ -1413,11 +1462,12 @@
     }
     
     function pushState(url, title) {
+      
       if (title && title !== document.title) {
         document.title = title;
       }
-      if (url && url !== location.href) {
-        history.pushState({ url: url, title: title}, title, url);
+      if (url !== location.href) {
+        history.pushState({ url: url || location.href, title: title || "Untitled Document"}, title, url);
       }
     }
     
@@ -1966,7 +2016,7 @@
         for (var i = 0; i < this.size(); i++) {
           var slide = this.get(i);
           var state = getSlideState(slide);
-          if (state && location.href.match(new RegExp(state.url,'g'))) {
+          if (state && location.href.match(new RegExp(escapeRegExp(state.url) + "$"))) {
             slideIndex = i;
             break;
           } 
