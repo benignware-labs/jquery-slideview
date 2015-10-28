@@ -12,9 +12,16 @@
 }(function ($) {
   
   // History Shim
-  var location = window.history.location || window.location;
+  var
+  
+    location = window.history.location || window.location,
     
-    
+    resolveURL = function(href) {
+      var l = document.createElement("a");
+      l.href = href;
+      return l.href;
+    };
+  
   // ImageLoader
   var imageLoader = new ((function() {
     
@@ -1472,10 +1479,11 @@
     }
     
     function jumpToSlide(url, clicked) {
+      url = resolveURL(url);
       clicked = typeof clicked === 'undefined' ? false : clicked;
       var slide = $(items).filter(function(index, item) {
         var state = getSlideState(item);
-        return state.url === url;
+        return resolveURL(state.url) === url;
       }).get(0);
       
       if (slide) {
@@ -2016,7 +2024,7 @@
         for (var i = 0; i < this.size(); i++) {
           var slide = this.get(i);
           var state = getSlideState(slide);
-          if (state && location.href.match(new RegExp(escapeRegExp(state.url) + "$"))) {
+          if (state && location.href === resolveURL(state.url)) {
             slideIndex = i;
             break;
           } 
