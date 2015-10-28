@@ -6,7 +6,7 @@
     "Rafael Nowrotek <mail@benignware.com>"
   ],
   "description": "JQuery Slider Component",
-  "main": "dist/js/jquery.slideview.min.js",
+  "main": "src/js/jquery.slideview.js",
   "keywords": [
     "jquery-plugin",
     "slider"
