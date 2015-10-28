@@ -21,30 +21,12 @@ module.exports = function(grunt) {
         cwd: 'src',
         src: ['**/jquery.slideview.*'],
         dest: 'dist/'
-      },
-      samples: {
-        expand: true,
-        cwd: 'src',
-        src: ['js/jquery.slideview.js', 'css/jquery.slideview.css'],
-        dest: 'samples/'
       }
     },
     uglify: {
       dist: {
         files: {
           'dist/js/jquery.slideview.min.js': ['src/js/jquery.slideview.js']
-        }
-      }
-    },
-    connect: {
-      samples: {
-        options: {
-          open: true,
-          base: 'samples',
-          port: 9090,
-          livereload: true,
-          keepalive: false,
-          index: 'index.html'
         }
       }
     }
@@ -58,8 +40,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['jshint']);
   
-  grunt.registerTask('build', ['copy:samples', 'copy:dist', 'uglify:dist']);
+  grunt.registerTask('build', ['copy:dist', 'uglify:dist']);
   
-  grunt.registerTask('serve', ['build', 'connect:samples', 'watch']);
+  grunt.registerTask('serve', ['build', 'watch']);
 
 };
