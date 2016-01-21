@@ -836,7 +836,7 @@
         this.replaceAll(opts.items);
       }
       if (opts.slideIndex >= 0) {
-        this.slideTo(opts.slideIndex, {duration: 0});
+        this.slideTo(opts.slideIndex, opts.items ? {duration: 0} : undefined);
       }
     };
     
@@ -1561,7 +1561,6 @@
     
     
     this.slideTo = function(item, transition) {
-      
       if (typeof item == "number") {
         var index = item;
         if (options.endless) {
@@ -2032,6 +2031,10 @@
       this.slideTo(slideIndex, {duration: 0});
       
     }
+    
+    this.slides = function() {
+      return items.slice();
+    };
     // init plugin
     init.call(this);
     
